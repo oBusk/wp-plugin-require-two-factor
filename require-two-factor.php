@@ -13,33 +13,28 @@
  */
 
 add_filter('two_factor_enabled_providers_for_user', function ($providers, $user_id) {
-    // Tracks the users we are already resolving, since the lookup below re-enters this filter.
-    static $resolving = [];
-
     // The Two-Factor plugin loads after mu-plugins, so it may not be there yet.
     if (! class_exists('Two_Factor_Core') || ! class_exists('Two_Factor_Email')) {
         return $providers;
     }
 
-    // Nothing to add when the fallback is already in place.
-    if (in_array('Two_Factor_Email', $providers, true)) {
-        return $providers;
+    $user = get_userdata($user_id);
+    $registered = Two_Factor_Core::get_providers();
+
+    foreach ($providers as $provider) {
+        // A provider that failed to load is left as a path string rather than an instance.
+        if (! isset($registered[$provider]) || ! $registered[$provider] instanceof Two_Factor_Provider) {
+            continue;
+        }
+
+        // Enabled is not enough: a reset authenticator app stays enabled but is no longer usable.
+        if ($registered[$provider]->is_available_for_user($user)) {
+            return $providers;
+        }
     }
 
-    // The re-entrant call resolves availability from the stored providers, so leave them alone.
-    if (isset($resolving[$user_id])) {
-        return $providers;
-    }
-
-    // Available means enabled AND configured: a reset authenticator app stays enabled but unusable.
-    $resolving[$user_id] = true;
-    $available = Two_Factor_Core::get_available_providers_for_user($user_id);
-    unset($resolving[$user_id]);
-
-    // No usable second factor, which is what the login flow checks before challenging.
-    if (empty($available)) {
-        $providers[] = 'Two_Factor_Email';
-    }
+    // Nothing usable, which is the same condition the login flow checks before challenging.
+    $providers[] = 'Two_Factor_Email';
 
     return $providers;
 }, 10, 2);
