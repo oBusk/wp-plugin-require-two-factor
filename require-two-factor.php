@@ -13,17 +13,12 @@
  */
 
 add_filter('two_factor_enabled_providers_for_user', function ($providers, $user_id) {
-    // The Two-Factor plugin loads after mu-plugins, so it may not be there yet.
-    if (! class_exists('Two_Factor_Core') || ! class_exists('Two_Factor_Email')) {
-        return $providers;
-    }
-
     $user = get_userdata($user_id);
     $registered = Two_Factor_Core::get_providers();
 
     foreach ($providers as $provider) {
-        // A provider that failed to load is left as a path string rather than an instance.
-        if (! isset($registered[$provider]) || ! $registered[$provider] instanceof Two_Factor_Provider) {
+        // A provider whose class could not be loaded is left as a path string rather than an instance.
+        if (! (($registered[$provider] ?? null) instanceof Two_Factor_Provider)) {
             continue;
         }
 
