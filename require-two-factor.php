@@ -14,6 +14,12 @@
 
 add_filter('two_factor_enabled_providers_for_user', function ($providers, $user_id) {
     $user = get_userdata($user_id);
+
+    // Core resolves the user before applying this filter, but another caller may not have.
+    if (! $user) {
+        return $providers;
+    }
+
     $registered = Two_Factor_Core::get_providers();
 
     foreach ($providers as $provider) {
