@@ -6,6 +6,8 @@ The [Two-Factor](https://wordpress.org/plugins/two-factor/) plugin (0.9.1) is op
 
 Users who have already configured their own provider (TOTP, WebAuthn, etc.) are unaffected — their provider list is non-empty, so the filter is a no-op.
 
+Based on [this WordPress.org support thread](https://wordpress.org/support/topic/can-i-by-default-turn-on-this-feature-for-all-my-existing-and-for-new-user/).
+
 ## Install
 
 Add the GitHub repository as a Composer VCS source, then require the package:

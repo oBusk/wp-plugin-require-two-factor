@@ -8,6 +8,8 @@
  * Author: Oscar Busk
  * Author URI: https://github.com/oBusk
  * License: MIT License
+ *
+ * @see https://wordpress.org/support/topic/can-i-by-default-turn-on-this-feature-for-all-my-existing-and-for-new-user/
  */
 
 add_filter('two_factor_enabled_providers_for_user', function ($providers) {
