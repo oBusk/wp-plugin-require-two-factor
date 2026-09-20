@@ -4,7 +4,7 @@ A WordPress mu-plugin that enforces two-factor authentication for all users by f
 
 The [Two-Factor](https://wordpress.org/plugins/two-factor/) plugin (0.9.1) is opt-in per user and has no enforcement setting. This package hooks into its `two_factor_enabled_providers_for_user` filter and adds `Two_Factor_Email` as a provider for any user who hasn't configured one, making email-based 2FA the default for every account with no enrollment step.
 
-Users who have already configured their own provider (TOTP, WebAuthn, etc.) are unaffected — their provider list is non-empty, so the filter is a no-op.
+Users who have already configured their own provider (TOTP, FIDO U2F, etc.) are unaffected — their provider list is non-empty, so the filter is a no-op.
 
 Based on [this WordPress.org support thread](https://wordpress.org/support/topic/can-i-by-default-turn-on-this-feature-for-all-my-existing-and-for-new-user/).
 
