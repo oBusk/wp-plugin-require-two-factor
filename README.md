@@ -8,24 +8,36 @@ Users who have already configured their own provider (TOTP, WebAuthn, etc.) are 
 
 Based on [this WordPress.org support thread](https://wordpress.org/support/topic/can-i-by-default-turn-on-this-feature-for-all-my-existing-and-for-new-user/).
 
+## Requirements
+
+- [Two-Factor](https://wordpress.org/plugins/two-factor/) plugin installed and active
+- [Bedrock](https://roots.io/bedrock/) or another Composer-managed WordPress setup with [`composer/installers`](https://github.com/composer/installers) (handles the `wordpress-muplugin` install type)
+- Bedrock's [mu-plugin autoloader](https://github.com/roots/bedrock-autoloader) or equivalent (WordPress only auto-loads `.php` files directly in `mu-plugins/`, not subdirectories)
+
 ## Install
 
-Add the GitHub repository as a Composer VCS source, then require the package:
+Add the VCS repository to your `composer.json` and require both the Two-Factor plugin and this package:
 
 ```json
 {
   "repositories": [
     {
+      "type": "composer",
+      "url": "https://repo.wp-packages.org"
+    },
+    {
       "type": "vcs",
       "url": "https://github.com/oBusk/require-two-factor"
     }
-  ]
+  ],
+  "require": {
+    "wp-plugin/two-factor": "^0.9",
+    "obusk/require-two-factor": "^1.0"
+  }
 }
 ```
 
-```sh
-composer require obusk/require-two-factor:^1.0
-```
+No configuration needed. Once installed, every user without a configured 2FA provider will be prompted for an email code on login.
 
 ## Caveats
 
