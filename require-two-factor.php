@@ -23,11 +23,6 @@ add_filter('two_factor_enabled_providers_for_user', function ($providers, $user_
     $registered = Two_Factor_Core::get_providers();
 
     foreach ($providers as $provider) {
-        // A provider whose class could not be loaded is left as a path string rather than an instance.
-        if (! (($registered[$provider] ?? null) instanceof Two_Factor_Provider)) {
-            continue;
-        }
-
         // Enabled is not enough: a reset authenticator app stays enabled but is no longer usable.
         if ($registered[$provider]->is_available_for_user($user)) {
             return $providers;
