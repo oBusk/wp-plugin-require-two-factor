@@ -2,7 +2,7 @@
 
 /**
  * Plugin Name: Require Two-Factor
- * Plugin URI: https://github.com/oBusk/require-two-factor
+ * Plugin URI: https://github.com/oBusk/wp-plugin-require-two-factor
  * Description: Falls back to email-based two-factor for any user who has not configured a provider
  * Version: 1.0.0
  * Author: Oscar Busk

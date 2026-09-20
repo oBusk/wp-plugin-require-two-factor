@@ -3,9 +3,9 @@
   "description": "Falls back to email-based two-factor for any user who has not configured a provider",
   "type": "wordpress-muplugin",
   "license": "MIT",
-  "homepage": "https://github.com/oBusk/require-two-factor",
+  "homepage": "https://github.com/oBusk/wp-plugin-require-two-factor",
   "support": {
-    "issues": "https://github.com/oBusk/require-two-factor/issues"
+    "issues": "https://github.com/oBusk/wp-plugin-require-two-factor/issues"
   },
   "keywords": [
     "wordpress",

@@ -27,7 +27,7 @@ Add the VCS repository to your `composer.json` and require both the Two-Factor p
     },
     {
       "type": "vcs",
-      "url": "https://github.com/oBusk/require-two-factor"
+      "url": "https://github.com/oBusk/wp-plugin-require-two-factor"
     }
   ],
   "require": {
