@@ -2,13 +2,9 @@
 
 A WordPress mu-plugin that enforces two-factor authentication for all users by falling back to email-based 2FA.
 
-The [Two-Factor](https://wordpress.org/plugins/two-factor/) plugin (0.9.1) is opt-in per user and has no enforcement setting. This package hooks into its `two_factor_enabled_providers_for_user` filter and adds `Two_Factor_Email` as a provider for any user who hasn't configured one, making email-based 2FA the default for every account with no enrollment step.
+The [Two-Factor](https://wordpress.org/plugins/two-factor/) plugin (0.9.1) is opt-in per user and has no enforcement setting. This package uses hooks to ensure at least one 2FA provider is enabled and configured, and if not, it enables email provider.
 
-Users who have already configured their own provider (TOTP, FIDO U2F, etc.) are unaffected — they have an available provider, so the filter is a no-op.
-
-The check is deliberately for *available* providers rather than *enabled* ones. The two can diverge: resetting the authenticator app deletes the TOTP secret but leaves `Two_Factor_Totp` in the user's enabled providers list, which leaves the account with a provider that cannot be used. Testing the enabled list alone would skip the fallback for those users and let them log in with a password only.
-
-Based on [this WordPress.org support thread](https://wordpress.org/support/topic/can-i-by-default-turn-on-this-feature-for-all-my-existing-and-for-new-user/).
+Originally based on [this WordPress.org support thread](https://wordpress.org/support/topic/can-i-by-default-turn-on-this-feature-for-all-my-existing-and-for-new-user/), but has been expanded to cover a bypass path for users with TOTP or FIDO U2F enabled but not actually configured.
 
 ## Requirements
 
@@ -44,5 +40,5 @@ No configuration needed. Once installed, every user without a configured 2FA pro
 ## Caveats
 
 - **Email deliverability becomes an auth dependency.** Every user without a configured provider will receive a one-time code by email on login. If your mail path is broken, those users are locked out. Recovery: deactivate the package (remove or rename the file in `mu-plugins/`).
-- **Email is a weaker second factor than TOTP.** This is a baseline enforcement measure, not a replacement for encouraging users to set up TOTP or WebAuthn.
+- **Email is a weaker second factor than TOTP.** This is a baseline enforcement measure, not a replacement for encouraging users to set up TOTP or FIDO U2F.
 - **Application passwords and XML-RPC bypass the 2FA flow entirely.** The Two-Factor plugin does not intercept these authentication paths. If this is a concern, disable them separately.

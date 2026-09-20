@@ -17,13 +17,15 @@ add_filter('two_factor_enabled_providers_for_user', function ($providers, $user_
     $registered = Two_Factor_Core::get_providers();
 
     foreach ($providers as $provider) {
-        // Enabled is not enough: a reset authenticator app stays enabled but is no longer usable.
+        // Check if any of the registered providers is "available"
+        // Available means it is both enabled and configured. E.g. totp can be enabled but not configured.
         if ($registered[$provider]->is_available_for_user($user)) {
+            // As long as any provider is available, return as is.
             return $providers;
         }
     }
 
-    // Nothing usable, which is the same condition the login flow checks before challenging.
+    // No provider was available, so we add email
     $providers[] = 'Two_Factor_Email';
 
     return $providers;
