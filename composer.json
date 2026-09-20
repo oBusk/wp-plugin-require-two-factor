@@ -1,0 +1,26 @@
+{
+  "name": "obusk/require-two-factor",
+  "description": "Falls back to email-based two-factor for any user who has not configured a provider",
+  "type": "wordpress-muplugin",
+  "license": "MIT",
+  "homepage": "https://github.com/oBusk/require-two-factor",
+  "support": {
+    "issues": "https://github.com/oBusk/require-two-factor/issues"
+  },
+  "keywords": [
+    "wordpress",
+    "bedrock",
+    "two-factor",
+    "security"
+  ],
+  "require": {
+    "php": ">=8.4"
+  },
+  "require-dev": {
+    "laravel/pint": "^1.0"
+  },
+  "scripts": {
+    "lint": "pint --test",
+    "lint:fix": "pint"
+  }
+}
