@@ -34,7 +34,7 @@ Add the VCS repository to your `composer.json` and require both the Two-Factor p
   ],
   "require": {
     "wp-plugin/two-factor": "^0.16",
-    "obusk/wp-plugin-require-two-factor": "^1.1"
+    "obusk/wp-plugin-require-two-factor": "^1.0"
   }
 }
 ```
