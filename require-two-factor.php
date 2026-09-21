@@ -12,6 +12,17 @@
  * @see https://wordpress.org/support/topic/can-i-by-default-turn-on-this-feature-for-all-my-existing-and-for-new-user/
  */
 
+// Ensure that email as a two-factor provider is always selectable
+add_filter('option_two_factor_enabled_providers', function ($providers) {
+    $providers = is_array($providers) ? $providers : [];
+
+    if (! in_array('Two_Factor_Email', $providers, true)) {
+        $providers[] = 'Two_Factor_Email';
+    }
+
+    return $providers;
+});
+
 add_filter('two_factor_enabled_providers_for_user', function ($providers, $user_id) {
     $user = get_userdata($user_id);
     $registered = Two_Factor_Core::get_providers();
