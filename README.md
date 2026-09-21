@@ -6,7 +6,8 @@ The [Two-Factor](https://wordpress.org/plugins/two-factor/) plugin is opt-in per
 
 Originally based on [this WordPress.org support thread](https://wordpress.org/support/topic/can-i-by-default-turn-on-this-feature-for-all-my-existing-and-for-new-user/), but has been expanded to cover a bypass path for users with a provider enabled but not usable: a provider enabled without being configured (possible in user meta written by older Two-Factor versions), or backup codes that have all been used.
 
-Two-Factor 0.16 added a site-wide provider selection under Settings → Two-Factor. This package keeps the email provider registered regardless of that setting, so **installing it means email 2FA is always enabled site-wide** and every user can pick it in their profile. That is the deliberate trade-off: TOTP cannot be forced on a user who never sets it up, so email is the floor everyone falls back to.
+> **Note:**
+> While this plugin is installed, email cannot be disabled as a provider. Any user will always be able to select email as a 2FA provider. We need email since it's the only 2FA that is automatically enforceable without requiring user setup.
 
 ## Requirements
 

@@ -12,19 +12,17 @@
  * @see https://wordpress.org/support/topic/can-i-by-default-turn-on-this-feature-for-all-my-existing-and-for-new-user/
  */
 
-// Two-Factor 0.16 lets an admin deselect providers site-wide, which removes them from
-// Two_Factor_Core::get_providers(). Email has to stay registered or the fallback below
-// resolves to a provider that no longer exists and the user logs in with no second factor.
-add_filter('two_factor_providers', function ($providers) {
-    if (! isset($providers['Two_Factor_Email'])) {
-        $providers['Two_Factor_Email'] = TWO_FACTOR_DIR.'providers/class-two-factor-email.php';
+// Ensure that email as a two-factor provider is always selectable
+add_filter('option_two_factor_enabled_providers', function ($providers) {
+    $providers = is_array($providers) ? $providers : [];
+
+    if (! in_array('Two_Factor_Email', $providers, true)) {
+        $providers[] = 'Two_Factor_Email';
     }
 
     return $providers;
-}, PHP_INT_MAX);
+});
 
-// Two-Factor 0.16 filters this same hook at priority 10 to enforce the site-wide provider
-// selection, and intersects away anything not in it. Run after that.
 add_filter('two_factor_enabled_providers_for_user', function ($providers, $user_id) {
     $user = get_userdata($user_id);
     $registered = Two_Factor_Core::get_providers();
@@ -42,4 +40,4 @@ add_filter('two_factor_enabled_providers_for_user', function ($providers, $user_
     $providers[] = 'Two_Factor_Email';
 
     return $providers;
-}, PHP_INT_MAX, 2);
+}, 10, 2);
