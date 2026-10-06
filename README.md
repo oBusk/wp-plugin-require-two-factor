@@ -11,7 +11,7 @@ Originally based on [this WordPress.org support thread](https://wordpress.org/su
 
 ## Requirements
 
-- [Two-Factor](https://wordpress.org/plugins/two-factor/) plugin 0.16 or newer, installed and active
+- [Two-Factor](https://wordpress.org/plugins/two-factor/) plugin 0.17 or newer, installed and active
 - PHP 8.4 or newer
 - [Bedrock](https://roots.io/bedrock/) or another Composer-managed WordPress setup with [`composer/installers`](https://github.com/composer/installers) (handles the `wordpress-muplugin` install type)
 - Bedrock's [mu-plugin autoloader](https://github.com/roots/bedrock-autoloader) or equivalent (WordPress only auto-loads `.php` files directly in `mu-plugins/`, not subdirectories)
@@ -33,7 +33,7 @@ Add the VCS repository to your `composer.json` and require both the Two-Factor p
     }
   ],
   "require": {
-    "wp-plugin/two-factor": "^0.16",
+    "wp-plugin/two-factor": "^0.17",
     "obusk/wp-plugin-require-two-factor": "^1.1"
   }
 }
@@ -45,4 +45,6 @@ No configuration needed. Once installed, every user without an available 2FA pro
 
 - **Email deliverability becomes an auth dependency.** Every user without an available provider will receive a one-time code by email on login. If your mail path is broken, those users are locked out. Recovery: remove the Composer requirement and deploy. Renaming the file in `mu-plugins/` works as an emergency stop, but will not survive a rebuild if the site runs from a built image.
 - **Email is a weaker second factor than TOTP.** This is a baseline enforcement measure, not a replacement for encouraging users to set up TOTP.
-- **Application passwords bypass the 2FA flow.** Since Two-Factor 0.14 application password logins over the REST API and XML-RPC are allowed by default for users with 2FA enabled. Return `false` from `two_factor_user_api_login_enable`, or disable application passwords, if this is a concern. XML-RPC with a regular password is still blocked.
+- **Application passwords bypass the 2FA flow.** Application password logins over the REST API and XML-RPC are allowed by default for users with 2FA enabled. Since Two-Factor 0.17 this is limited to the user who authenticated with the application password; regular passwords are blocked for API requests. Return `false` from `two_factor_user_api_login_enable`, or disable application passwords, if this is a concern.
+- **`two_factor_is_required_for_user` bypasses enforcement.** Since Two-Factor 0.17, any code returning `false` from this filter skips the 2FA flow for that user entirely, including the email fallback. Audit other plugins and themes for it.
+- **`wp two-factor disable <user>` reports an error.** Without a provider argument, the command wipes the user's 2FA data (TOTP secret, backup codes, provider settings), then fails with "2FA is still active for user … manual inspection required" because this plugin re-adds email. The data is already wiped and the user falls back to email as intended, but the command exits before destroying the user's sessions. Run `wp user session destroy <user> --all` afterwards.
